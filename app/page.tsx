@@ -66,7 +66,7 @@ export default function Home() {
           setResult(result.getText());
           toast.success("QR code scanned successfully!");
           setPhaseUpload(2);
-        } catch (error) {
+        } catch {
           setResult("No QR code found");
           toast.error("No QR code detected in the image");
         } finally {
@@ -98,7 +98,7 @@ export default function Home() {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
-    } catch (error) {
+    } catch {
       toast.error("Camera access denied or unavailable");
       setIsCameraActive(false);
     }
@@ -247,7 +247,7 @@ export default function Home() {
                         className="underline cursor-pointer"
                         href="https://www.npmjs.com/package/@zxing/library"
                       >
-                        Google's Zxing library
+                        Google&apos;s Zxing library
                       </a>
                       .
                     </i>
