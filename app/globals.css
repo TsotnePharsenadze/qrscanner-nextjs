@@ -3,16 +3,13 @@
 @tailwind utilities;
 
 body {
-
-  background: rgb(244, 91, 105);
+  background: linear-gradient(to bottom, #f59e0b, #ffffff);
+  background-repeat: no-repeat;
   padding: 20px;
 }
 
-
-
 @layer base {
   :root {
-
     --background: 0 0% 100%;
 
     --foreground: 0 0% 3.9%;
@@ -64,7 +61,6 @@ body {
     --radius: 0.5rem;
   }
   .dark {
-
     --background: 0 0% 3.9%;
 
     --foreground: 0 0% 98%;
@@ -114,8 +110,6 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {
