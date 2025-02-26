@@ -92,8 +92,14 @@ export default function Home() {
     setIsCameraActive(true);
     setPhaseUpload(1);
 
+    const constraints = {
+      video: {
+        facingMode: "environment",
+      },
+    };
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
@@ -109,7 +115,13 @@ export default function Home() {
 
     const context = canvasRef.current.getContext("2d");
     if (context) {
-      context.drawImage(videoRef.current, 0, 0, 300, 300);
+      context.drawImage(
+        videoRef.current,
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
       const imageSrc = canvasRef.current.toDataURL("image/png");
       setUploadedImage(imageSrc);
       processImage(imageSrc);
@@ -371,21 +383,7 @@ export default function Home() {
               </div>
             </CardContent>
             <CardFooter>
-              {phaseUpload === 1 ? (
-                <Button
-                  onClick={startCamera}
-                  className={`${customError && "border border-red-500"}`}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    "Processing..."
-                  ) : (
-                    <>
-                      <FaPlus /> Start Scanning
-                    </>
-                  )}
-                </Button>
-              ) : (
+              {phaseUpload === 2 && (
                 <Button
                   variant="default"
                   size="lg"
