@@ -53,15 +53,8 @@ const Navbar = () => {
           </li>
           <Separator orientation="vertical" />
           <li>
-            <Link href="/login">
-              <Button className="uppercase">Login</Button>
-            </Link>
-          </li>
-          <li>
-            <Link href="/register">
-              <Button className="uppercase" variant="ghost">
-                Register
-              </Button>
+            <Link href="/history">
+              <Button className="uppercase">History</Button>
             </Link>
           </li>
         </ul>
@@ -103,15 +96,8 @@ const Navbar = () => {
               </li>
               <Separator orientation="vertical" />
               <li>
-                <Link href="/login">
-                  <Button className="uppercase">Login</Button>
-                </Link>
-              </li>
-              <li>
-                <Link href="/register">
-                  <Button className="uppercase" variant="ghost">
-                    Register
-                  </Button>
+                <Link href="/history">
+                  <Button className="uppercase">History</Button>
                 </Link>
               </li>
             </ul>
