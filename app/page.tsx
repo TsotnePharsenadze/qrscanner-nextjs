@@ -25,7 +25,7 @@ import {
   IoCamera,
 } from "react-icons/io5";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { BrowserMultiFormatReader } from "@zxing/library";
@@ -33,14 +33,39 @@ import { BrowserMultiFormatReader } from "@zxing/library";
 export default function Home() {
   const [uploadedImage, setUploadedImage] = useState<string>("");
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
+  const [uploadedCameraImage, setUploadedCameraImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [phaseUpload, setPhaseUpload] = useState<number>(1);
   const [customError, setCustomError] = useState<string>("");
   const [result, setResult] = useState<string>("");
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isCameraActive, setIsCameraActive] = useState(false);
+
+  useEffect(() => {
+    if (videoRef.current && isCameraActive) {
+      const checkReadyState = () => {
+        if (videoRef.current && videoRef.current.readyState >= 2) {
+          setIsCameraReady(true);
+        }
+      };
+
+      checkReadyState();
+      const interval = setInterval(checkReadyState, 500);
+
+      return () => clearInterval(interval);
+    } else {
+      setIsCameraReady(false);
+    }
+  }, [isCameraActive]);
+
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,14 +91,22 @@ export default function Home() {
           setResult(result.getText());
           toast.success("QR code scanned successfully!");
           setPhaseUpload(2);
-        } catch {
+        } catch (error) {
+          console.error("QR code scanning error:", error);
           setResult("No QR code found");
           toast.error("No QR code detected in the image");
         } finally {
           setIsLoading(false);
         }
       };
-    } catch {
+
+      image.onerror = () => {
+        console.error("Image failed to load");
+        toast.error("Failed to load the captured image");
+        setIsLoading(false);
+      };
+    } catch (error) {
+      console.error("Image processing error:", error);
       toast.error("Failed to process image");
       setIsLoading(false);
     }
@@ -89,8 +122,10 @@ export default function Home() {
   };
 
   const startCamera = async () => {
-    setIsCameraActive(true);
-    setPhaseUpload(1);
+    setIsCameraActive(false);
+    setIsCameraReady(false);
+    setUploadedCameraImage("");
+    console.log(uploadedCameraImage);
 
     const constraints = {
       video: {
@@ -102,32 +137,71 @@ export default function Home() {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
+        videoRef.current.onloadeddata = () => {
+          setIsCameraReady(true);
+          console.log("Camera feed is ready");
+        };
+        videoRef.current.play().catch((err) => {
+          console.error("Error playing video:", err);
+          toast.error("Failed to start camera feed");
+        });
+        setIsCameraActive(true);
       }
-    } catch {
+    } catch (error) {
+      console.error("Camera access error:", error);
       toast.error("Camera access denied or unavailable");
       setIsCameraActive(false);
     }
   };
 
   const capturePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const context = canvasRef.current.getContext("2d");
-    if (context) {
-      context.drawImage(
-        videoRef.current,
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
-      const imageSrc = canvasRef.current.toDataURL("image/png");
-      setUploadedImage(imageSrc);
-      processImage(imageSrc);
+    if (!videoRef.current || !canvasRef.current) {
+      toast.error("Camera components not initialized");
+      return;
     }
 
-    stopCamera();
+    if (!isCameraReady) {
+      toast.error("Camera feed not ready yet, please wait");
+      return;
+    }
+
+    try {
+      if (!canvasRef.current) {
+        const canvas = document.createElement("canvas");
+        canvasRef.current = canvas;
+      }
+
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        canvasRef.current.width = videoRef.current.videoWidth;
+        canvasRef.current.height = videoRef.current.videoHeight;
+
+        context.drawImage(
+          videoRef.current,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
+
+        const imageSrc = canvasRef.current.toDataURL("image/png");
+
+        if (imageSrc === "data:,") {
+          throw new Error("Failed to capture image data");
+        }
+
+        console.log("Image captured successfully");
+        setUploadedCameraImage(imageSrc);
+        processImage(imageSrc);
+      } else {
+        throw new Error("Could not get canvas context");
+      }
+    } catch (error) {
+      console.error("Error capturing photo:", error);
+      toast.error("Failed to capture photo");
+    } finally {
+      stopCamera();
+    }
   };
 
   const stopCamera = () => {
@@ -137,6 +211,7 @@ export default function Home() {
       videoRef.current.srcObject = null;
     }
     setIsCameraActive(false);
+    setIsCameraReady(false);
   };
 
   return (
@@ -357,23 +432,33 @@ export default function Home() {
                       </div>
                     ) : (
                       <div className="relative">
-                        {isCameraActive && (
-                          <video
-                            ref={videoRef}
-                            className="border-2 rounded-lg w-full"
-                            width="300"
-                            height="200"
-                            autoPlay
-                            muted
-                          ></video>
-                        )}
-                        {isCameraActive && (
-                          <Button
-                            onClick={capturePhoto}
-                            className="absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-white"
-                          >
-                            <IoQrCode /> Capture & Scan
-                          </Button>
+                        {isCameraActive && phaseUpload === 1 && (
+                          <>
+                            <video
+                              ref={videoRef}
+                              className="border-2 rounded-lg w-full"
+                              width={300}
+                              height={200}
+                              autoPlay
+                              playsInline
+                              muted
+                            ></video>
+                            <canvas ref={canvasRef} className="hidden"></canvas>
+
+                            <Button
+                              variant="default"
+                              onClick={capturePhoto}
+                              disabled={!isCameraReady}
+                              className={`absolute bottom-5 left-1/2 transform -translate-x-1/2 ${
+                                isCameraReady ? "bg-green-500" : "bg-gray-400"
+                              }`}
+                            >
+                              <IoQrCode />{" "}
+                              {isCameraReady
+                                ? "Capture & Scan"
+                                : "Camera Initializing..."}
+                            </Button>
+                          </>
                         )}
                       </div>
                     )}
