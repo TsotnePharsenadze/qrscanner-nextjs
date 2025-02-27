@@ -39,8 +39,8 @@ export default function About() {
       <Header />
       <Separator orientation="horizontal" />
 
-      <div className="p-8 flex flex-col items-center max-w-screen-md mx-auto">
-        <Card className="w-full">
+      <div className="p-8 flex flex-col items-center max-w-screen-md mx-auto customEditForAboutUsCardWrapper">
+        <Card className="w-full customEditForAboutUsCard">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
               About QR Scanner
@@ -128,7 +128,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg text-sm text-gray-500">
+            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg text-sm text-gray-500 customEditForVersion">
               <div className="flex items-center gap-2">
                 <IoInformation />
                 Version 1.0.0
@@ -140,7 +140,7 @@ export default function About() {
             </div>
           </CardContent>
 
-          <CardFooter className="flex justify-center border-t pt-6">
+          <CardFooter className="flex justify-center border-t pt-6 customEditForAboutUsCardFooter">
             <Button
               variant="outline"
               className="mr-2"

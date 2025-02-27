@@ -57,8 +57,8 @@ export default function Contact() {
       <Header />
       <Separator orientation="horizontal" />
 
-      <div className="p-8 flex flex-col items-center max-w-screen-md mx-auto">
-        <Card className="w-full">
+      <div className="p-8 flex flex-col items-center max-w-screen-md mx-auto customEditForContactUsCardWrapper">
+        <Card className="w-full customEditForContactUsCard">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Contact Us</CardTitle>
             <CardDescription>
@@ -217,7 +217,7 @@ export default function Contact() {
             </form>
           </CardContent>
 
-          <CardFooter className="flex justify-center border-t pt-6">
+          <CardFooter className="flex justify-center border-t pt-6 customEditForAboutUsCardFooter">
             <Button
               variant="outline"
               className="mr-2"

@@ -64,8 +64,8 @@ export default function HistoryPage() {
       <Separator orientation="horizontal" />
       <Header />
       <Separator orientation="horizontal" />
-      <div className="p-8 flex flex-col items-center max-w-screen-md mx-auto">
-        <Card className="w-full">
+      <div className="p-8 flex flex-col items-center max-w-screen-md mx-auto customEditForHistoryUsCardWrapper">
+        <Card className="w-full customEditForHistoryUsCard">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">History</CardTitle>
             <CardDescription>

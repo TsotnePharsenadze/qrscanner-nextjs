@@ -172,11 +172,15 @@ export default function Home() {
       <Separator orientation="horizontal" />
       <Tabs
         defaultValue="upload"
-        className="p-8 flex flex-col justify-center items-center max-w-screen-md mx-auto"
+        className="p-4 sm:p-8 flex flex-col justify-center items-center max-w-screen-md mx-auto customEditForTabs"
       >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upload">Upload an image</TabsTrigger>
-          <TabsTrigger value="take">Take a picture</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 customEditForTabs">
+          <TabsTrigger value="upload" className="customEditForTabButtons">
+            Upload an image
+          </TabsTrigger>
+          <TabsTrigger value="take" className="customEditForTabButtons">
+            Take a picture
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="upload" className="max-w-screen-md w-full">
           <Card>
@@ -187,7 +191,7 @@ export default function Home() {
                 its content
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2 mt-2">
+            <CardContent className="space-y-2 mt-2 customEditForCardContent">
               <div
                 className={`border-t-4 rounded-lg p-2 ${
                   phaseUpload === 1
@@ -340,7 +344,7 @@ export default function Home() {
                 content.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2 mt-2">
+            <CardContent className="space-y-2 mt-2 customEditForCardContent">
               <div
                 className={`border-t-4 rounded-lg p-2 ${
                   phaseUploadCamera === 1

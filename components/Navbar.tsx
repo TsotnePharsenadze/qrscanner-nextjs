@@ -14,7 +14,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 
 const Navbar = () => {
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-8">
       <nav className="flex justify-between">
         <Link href="/">
           <div className="relative overflow-hidden group">
@@ -69,8 +69,8 @@ const Navbar = () => {
                     <div className="flex gap-x-2 items-center font-bold">
                       <Image
                         src="/logo.png"
-                        height={32}
-                        width={32}
+                        height={52}
+                        width={52}
                         alt="QR Code of my github as a logo"
                       />
                       QR Scanner
