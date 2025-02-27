@@ -32,10 +32,10 @@ Simple and secure QR code scanner.
 
 ## Desktop Screenshots 📸
 
-| ![Image 1](https://github.com/user-attachments/assets/154fa452-619b-48fb-9bb8-e2a1d92c3b6b) | ![Image 2](https://github.com/user-attachments/assets/8874a15c-7c35-44fe-96fb-1771820b5248) | ![Image 3](https://github.com/user-attachments/assets/003e5b08-e079-4b52-bff0-4d277dde8c34) |
+| ![Image 1](https://github.com/user-attachments/assets/154fa452-619b-48fb-9bb8-e2a1d92c3b6b) | ![Image 2](https://github.com/user-attachments/assets/8874a15c-7c35-44fe-96fb-1771820b5248) | ![Image 9](https://github.com/user-attachments/assets/dbe84d32-3340-4c01-9b8c-a4aec6d832bf) |
 | --- | --- | --- |
 | ![Image 4](https://github.com/user-attachments/assets/5d9645a1-ee78-4ee1-8480-67052b63f6ae) | ![Image 5](https://github.com/user-attachments/assets/4100ce9a-0689-4b02-ba15-764daa730bf2) | ![Image 6](https://github.com/user-attachments/assets/e6ff11fb-80d6-4f4d-a1f0-3ff615fd2e1c) |
-| ![Image 7](https://github.com/user-attachments/assets/159e4d0f-d3a7-4a93-9967-f86b1ebc6882) | ![Image 8](https://github.com/user-attachments/assets/e9bcbb10-181d-4358-8967-e37db57d4212) | ![Image 9](https://github.com/user-attachments/assets/dbe84d32-3340-4c01-9b8c-a4aec6d832bf) |
+| ![Image 7](https://github.com/user-attachments/assets/159e4d0f-d3a7-4a93-9967-f86b1ebc6882) | ![Image 8](https://github.com/user-attachments/assets/e9bcbb10-181d-4358-8967-e37db57d4212) | ![Image 3](https://github.com/user-attachments/assets/003e5b08-e079-4b52-bff0-4d277dde8c34) |
 | ![Image 10](https://github.com/user-attachments/assets/c829623c-6a22-4bd8-a174-a03bbe234c0b) |  |  |
 
 
