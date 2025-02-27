@@ -40,7 +40,8 @@ export default function Contact() {
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    console.log("Form data:", data);
+    // TODO: NeonDB + Prisma
+
     setIsSubmitting(false);
     setIsSubmitted(true);
     reset();
@@ -62,7 +63,7 @@ export default function Contact() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Contact Us</CardTitle>
             <CardDescription>
-              Have questions or feedback? We'd love to hear from you!
+              Have questions or feedback? We&apos;d love to hear from you!
             </CardDescription>
           </CardHeader>
 
@@ -73,15 +74,15 @@ export default function Contact() {
                 Get in Touch
               </h2>
               <p className="text-gray-700">
-                Whether you're experiencing an issue, want to provide feedback,
+                Whether you&apos;re experiencing an issue, want to provide feedback,
                 or have questions about our QR Scanner, please fill out the form
-                below and we'll get back to you as soon as possible.
+                below and we&apos;ll get back to you as soon as possible.
               </p>
             </div>
 
             {isSubmitted && (
               <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded text-green-700">
-                Thank you for your message! We'll respond to you shortly.
+                Thank you for your message! We&apos;ll respond to you shortly.
               </div>
             )}
 
@@ -109,7 +110,7 @@ export default function Contact() {
                 </div>
                 {errors.name && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.name.message}
+                    {errors.name.message as string}
                   </p>
                 )}
               </div>
@@ -143,7 +144,7 @@ export default function Contact() {
                 </div>
                 {errors.email && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.email.message}
+                    {errors.email.message as string}
                   </p>
                 )}
               </div>
@@ -166,7 +167,7 @@ export default function Contact() {
                 />
                 {errors.subject && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.subject.message}
+                    {errors.subject.message as string}
                   </p>
                 )}
               </div>
@@ -180,7 +181,7 @@ export default function Contact() {
                 </label>
                 <textarea
                   id="message"
-                  rows="5"
+                  rows={5}
                   className={`w-full p-2 border rounded-md ${
                     errors.message ? "border-red-500" : "border-gray-300"
                   }`}
@@ -195,7 +196,7 @@ export default function Contact() {
                 ></textarea>
                 {errors.message && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.message.message}
+                    {errors.message.message as string}
                   </p>
                 )}
               </div>

@@ -13,16 +13,12 @@ import {
 import { Separator } from "@/components/ui/separator";
 import {
   IoCalendarOutline,
-  IoCamera,
   IoCodeSlash,
   IoInformation,
   IoInformationCircle,
   IoLogoGithub,
   IoMailOutline,
-  IoQrCode,
   IoShieldCheckmark,
-  IoShieldOutline,
-  IoSpeedometer,
   IoStarOutline,
 } from "react-icons/io5";
 import Image from "next/image";
@@ -61,7 +57,7 @@ export default function About() {
                 QR Scanner is a web application designed to provide fast,
                 secure, and reliable QR code scanning capabilities directly in
                 your browser. Whether you need to scan a QR code from an image
-                file or capture one using your device's camera, this tool makes
+                file or capture one using your device&apos;s camera, this tool makes
                 the process simple and efficient.
               </p>
             </div>
