@@ -28,6 +28,7 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { keyFeatures, privacySecurityLi, technologyStack } from "@/data";
 
 export default function About() {
   const router = useRouter();
@@ -71,46 +72,17 @@ export default function About() {
                 Key Features
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center gap-2 font-medium mb-2">
-                    <IoQrCode className="text-green-500" />
-                    File Upload Scanning
+                {keyFeatures.map((feature) => (
+                  <div className="border p-4 rounded-lg shadow-sm">
+                    <div className="flex items-center gap-2 font-medium mb-2">
+                      {<feature.icon className="text-green-500" />}
+                      {feature.title}
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      {feature.description}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600">
-                    Upload QR code images from your device and instantly
-                    retrieve the encoded content.
-                  </p>
-                </div>
-                <div className="border p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center gap-2 font-medium mb-2">
-                    <IoCamera className="text-green-500" />
-                    Camera Scanning
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Use your device's camera to scan QR codes in real-time
-                    without downloading any additional apps.
-                  </p>
-                </div>
-                <div className="border p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center gap-2 font-medium mb-2">
-                    <IoShieldOutline className="text-green-500" />
-                    Privacy-Focused
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    All processing happens directly in your browser. No images
-                    or QR code data are sent to any server.
-                  </p>
-                </div>
-                <div className="border p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center gap-2 font-medium mb-2">
-                    <IoSpeedometer className="text-green-500" />
-                    Fast & Reliable
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Built on Google's ZXing library, providing the most reliable
-                    QR code detection available.
-                  </p>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -121,50 +93,19 @@ export default function About() {
               </h2>
               <div className="border-t-4 border-t-purple-500 rounded-lg p-4 shadow-sm">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="flex flex-col items-center p-2">
-                    <div className="w-12 h-12 flex items-center justify-center mb-2">
-                      <Image
-                        src="/react.svg"
-                        alt="React"
-                        width={40}
-                        height={40}
-                      />
+                  {technologyStack.map((item) => (
+                    <div className="flex flex-col items-center p-2">
+                      <div className="w-12 h-12 flex items-center justify-center mb-2">
+                        <Image
+                          src={item.src}
+                          alt={item.alt}
+                          width={40}
+                          height={40}
+                        />
+                      </div>
+                      <span className="text-sm font-medium">{item.title}</span>
                     </div>
-                    <span className="text-sm font-medium">React</span>
-                  </div>
-                  <div className="flex flex-col items-center p-2">
-                    <div className="w-12 h-12 flex items-center justify-center mb-2">
-                      <Image
-                        src="/typescript.svg"
-                        alt="TypeScript"
-                        width={40}
-                        height={40}
-                      />
-                    </div>
-                    <span className="text-sm font-medium">TypeScript</span>
-                  </div>
-                  <div className="flex flex-col items-center p-2">
-                    <div className="w-12 h-12 flex items-center justify-center mb-2">
-                      <Image
-                        src="/nextjs.svg"
-                        alt="Next.js"
-                        width={40}
-                        height={40}
-                      />
-                    </div>
-                    <span className="text-sm font-medium">Next.js</span>
-                  </div>
-                  <div className="flex flex-col items-center p-2">
-                    <div className="w-12 h-12 flex items-center justify-center mb-2">
-                      <Image
-                        src="/zxing.svg"
-                        alt="ZXing"
-                        width={40}
-                        height={40}
-                      />
-                    </div>
-                    <span className="text-sm font-medium">ZXing</span>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -180,10 +121,9 @@ export default function About() {
                   client-side, meaning:
                 </p>
                 <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-700">
-                  <li>No images or QR code data are uploaded to any server</li>
-                  <li>All processing happens within your browser</li>
-                  <li>No personal data is collected or stored</li>
-                  <li>No cookies are used for tracking purposes</li>
+                  {privacySecurityLi.map((text) => (
+                    <li>{text}</li>
+                  ))}
                 </ul>
               </div>
             </div>
