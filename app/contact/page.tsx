@@ -41,7 +41,7 @@ export default function Contact() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     // TODO: NeonDB + Prisma
-
+    console.log(data);
     setIsSubmitting(false);
     setIsSubmitted(true);
     reset();
