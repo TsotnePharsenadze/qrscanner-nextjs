@@ -72,8 +72,8 @@ export default function About() {
                 Key Features
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {keyFeatures.map((feature) => (
-                  <div className="border p-4 rounded-lg shadow-sm">
+                {keyFeatures.map((feature, index) => (
+                  <div key={index} className="border p-4 rounded-lg shadow-sm">
                     <div className="flex items-center gap-2 font-medium mb-2">
                       {<feature.icon className="text-green-500" />}
                       {feature.title}
@@ -93,8 +93,8 @@ export default function About() {
               </h2>
               <div className="border-t-4 border-t-purple-500 rounded-lg p-4 shadow-sm">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {technologyStack.map((item) => (
-                    <div className="flex flex-col items-center p-2">
+                  {technologyStack.map((item, index) => (
+                    <div key={index} className="flex flex-col items-center p-2">
                       <div className="w-12 h-12 flex items-center justify-center mb-2">
                         <Image
                           src={item.src}
@@ -121,8 +121,8 @@ export default function About() {
                   client-side, meaning:
                 </p>
                 <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-700">
-                  {privacySecurityLi.map((text) => (
-                    <li>{text}</li>
+                  {privacySecurityLi.map((text, index) => (
+                    <li key={index}>{text}</li>
                   ))}
                 </ul>
               </div>

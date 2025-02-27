@@ -8,6 +8,12 @@ body {
   padding: 20px;
 }
 
+@media screen and (max-width: 590px) {
+  body {
+    padding: 0px;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

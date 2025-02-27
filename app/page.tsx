@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CiCircleCheck } from "react-icons/ci";
-import { FaPlus } from "react-icons/fa";
+import { FaCheck, FaPlus } from "react-icons/fa";
 import {
   IoArrowBack,
   IoCloseCircleOutline,
@@ -35,11 +35,21 @@ export default function Home() {
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
   const [uploadedCameraImage, setUploadedCameraImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [uploadedImageBase, setUploadedImageBase64] = useState<string>("");
   const [customError, setCustomError] = useState<string>("");
+
+  const [copy, setCopy] = useState<boolean>(false);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result as string;
+        setUploadedImageBase64(base64Image);
+      };
+      reader.readAsDataURL(file);
+
       setUploadedImage(URL.createObjectURL(file));
       setUploadedImageFile(file);
       e.target.value = "";
@@ -53,6 +63,7 @@ export default function Home() {
     try {
       const image = new window.Image();
       image.src = imageSrc;
+      let parsedData: any = [];
 
       image.onload = async () => {
         try {
@@ -61,6 +72,18 @@ export default function Home() {
           setResult(result.getText());
           toast.success("QR code scanned successfully!");
           if (!type) {
+            const localStorageData = localStorage.getItem("scannedResults");
+            if (localStorageData) {
+              parsedData = JSON.parse(localStorageData);
+            }
+            parsedData.push({
+              id: new Date().toISOString(),
+              src: uploadedImageBase,
+              type: !type ? "Uploaded Image" : "Camera taken Image",
+              content: result,
+            });
+            localStorage.setItem("scannedResults", JSON.stringify(parsedData));
+
             setPhaseUpload(2);
           } else {
             setPhaseUploadCamera(2);
@@ -290,9 +313,19 @@ export default function Home() {
                   onClick={() => {
                     navigator.clipboard.writeText(result);
                     toast.success("Copied to clipboard!");
+                    setCopy(true);
+                    setTimeout(() => {
+                      setCopy(false);
+                    }, 2500);
                   }}
                 >
-                  <IoCopy /> COPY RESULTS
+                  {copy ? (
+                    <FaCheck />
+                  ) : (
+                    <>
+                      <IoCopy /> COPY RESULTS
+                    </>
+                  )}
                 </Button>
               )}
             </CardFooter>
@@ -441,9 +474,19 @@ export default function Home() {
                   onClick={() => {
                     navigator.clipboard.writeText(result);
                     toast.success("Copied to clipboard!");
+                    setCopy(true);
+                    setTimeout(() => {
+                      setCopy(false);
+                    }, 2500);
                   }}
                 >
-                  <IoCopy /> COPY RESULTS
+                  {copy ? (
+                    <FaCheck />
+                  ) : (
+                    <>
+                      <IoCopy /> COPY RESULTS
+                    </>
+                  )}
                 </Button>
               )}
             </CardFooter>
