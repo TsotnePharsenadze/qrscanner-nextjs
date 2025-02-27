@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QR Scanner 📱🔍
 
-## Getting Started
+Simple and secure QR code scanner.
 
-First, run the development server:
+## About This App
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+QR Scanner is a web application designed to provide fast, secure, and reliable QR code scanning capabilities directly in your browser. Whether you need to scan a QR code from an image file or capture one using your device's camera, this tool makes the process simple and efficient.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Features 🌟
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **File Upload Scanning** 📂  
+  Upload QR code images from your device and instantly retrieve the encoded content.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Camera Scanning** 📸  
+  Use your device’s camera to scan QR codes in real-time without downloading any additional apps.
 
-## Learn More
+- **Privacy-Focused** 🔒  
+  All processing happens directly in your browser. No images or QR code data are sent to any server.
 
-To learn more about Next.js, take a look at the following resources:
+- **Fast & Reliable** ⚡  
+  Built on Google's ZXing library, providing the most reliable QR code detection available.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technology Stack 🛠️
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- React ⚛️
+- TypeScript 🟨
+- Next.js 🚀
+- ZXing 🧩
 
-## Deploy on Vercel
+## Privacy & Security 🛡️
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+We take your privacy seriously. This QR scanner works entirely client-side, meaning:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No images or QR code data are uploaded to any server
+- All processing happens within your browser
+- No personal data is collected or stored
+- No cookies are used for tracking purposes
