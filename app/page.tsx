@@ -35,37 +35,7 @@ export default function Home() {
   const [uploadedImageFile, setUploadedImageFile] = useState<File | null>(null);
   const [uploadedCameraImage, setUploadedCameraImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [phaseUpload, setPhaseUpload] = useState<number>(1);
   const [customError, setCustomError] = useState<string>("");
-  const [result, setResult] = useState<string>("");
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [isCameraReady, setIsCameraReady] = useState(false);
-
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    if (videoRef.current && isCameraActive) {
-      const checkReadyState = () => {
-        if (videoRef.current && videoRef.current.readyState >= 2) {
-          setIsCameraReady(true);
-        }
-      };
-
-      checkReadyState();
-      const interval = setInterval(checkReadyState, 500);
-
-      return () => clearInterval(interval);
-    } else {
-      setIsCameraReady(false);
-    }
-  }, [isCameraActive]);
-
-  useEffect(() => {
-    return () => {
-      stopCamera();
-    };
-  }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -121,97 +91,48 @@ export default function Home() {
     processImage(URL.createObjectURL(uploadedImageFile));
   };
 
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [phaseUpload, setPhaseUpload] = useState(1);
+  const [result, setResult] = useState("");
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
   const startCamera = async () => {
-    setIsCameraActive(false);
-    setIsCameraReady(false);
-    setUploadedCameraImage("");
-    console.log(uploadedCameraImage);
-
-    const constraints = {
-      video: {
-        facingMode: "environment",
-      },
-    };
-
+    setIsCameraActive(true);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.onloadeddata = () => {
-          setIsCameraReady(true);
-          console.log("Camera feed is ready");
-        };
-        videoRef.current.play().catch((err) => {
-          console.error("Error playing video:", err);
-          toast.error("Failed to start camera feed");
-        });
-        setIsCameraActive(true);
+        videoRef.current.onloadedmetadata = () => setIsCameraReady(true);
       }
     } catch (error) {
-      console.error("Camera access error:", error);
-      toast.error("Camera access denied or unavailable");
-      setIsCameraActive(false);
+      console.error("Error accessing webcam:", error);
+      toast.error("Failed to access webcam");
     }
   };
 
   const capturePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) {
-      toast.error("Camera components not initialized");
-      return;
-    }
-
-    if (!isCameraReady) {
-      toast.error("Camera feed not ready yet, please wait");
-      return;
-    }
-
-    try {
-      if (!canvasRef.current) {
-        const canvas = document.createElement("canvas");
-        canvasRef.current = canvas;
-      }
-
+    if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext("2d");
       if (context) {
         canvasRef.current.width = videoRef.current.videoWidth;
         canvasRef.current.height = videoRef.current.videoHeight;
-
-        context.drawImage(
-          videoRef.current,
-          0,
-          0,
-          canvasRef.current.width,
-          canvasRef.current.height
-        );
+        context.drawImage(videoRef.current, 0, 0);
 
         const imageSrc = canvasRef.current.toDataURL("image/png");
-
-        if (imageSrc === "data:,") {
-          throw new Error("Failed to capture image data");
-        }
-
-        console.log("Image captured successfully");
         setUploadedCameraImage(imageSrc);
         processImage(imageSrc);
-      } else {
-        throw new Error("Could not get canvas context");
-      }
-    } catch (error) {
-      console.error("Error capturing photo:", error);
-      toast.error("Failed to capture photo");
-    } finally {
-      stopCamera();
-    }
-  };
 
-  const stopCamera = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
+        const stream = videoRef.current.srcObject as MediaStream;
+        if (stream) {
+          const tracks = stream.getTracks();
+          tracks.forEach((track) => track.stop());
+          videoRef.current.srcObject = null;
+          setIsCameraActive(false);
+        }
+      }
     }
-    setIsCameraActive(false);
-    setIsCameraReady(false);
   };
 
   return (
@@ -298,8 +219,8 @@ export default function Home() {
                             <Image
                               src={uploadedImage}
                               alt="Uploaded Image"
-                              width="100"
-                              height="100"
+                              width="200"
+                              height="200"
                             />
                             <button
                               type="button"
@@ -417,7 +338,9 @@ export default function Home() {
 
                 <div className="bg-gray-50 p-2">
                   <div className="border-2 border-dashed">
-                    {phaseUpload === 1 && !isCameraActive ? (
+                    {phaseUpload === 1 &&
+                    !isCameraActive &&
+                    !uploadedCameraImage ? (
                       <div className="flex flex-col justify-center items-center gap-y-2 p-2 cursor-pointer">
                         <Button
                           onClick={startCamera}
@@ -449,9 +372,7 @@ export default function Home() {
                               variant="default"
                               onClick={capturePhoto}
                               disabled={!isCameraReady}
-                              className={`absolute bottom-5 left-1/2 transform -translate-x-1/2 ${
-                                isCameraReady ? "bg-green-500" : "bg-gray-400"
-                              }`}
+                              className={`absolute bottom-5 left-1/2 transform -translate-x-1/2`}
                             >
                               <IoQrCode />{" "}
                               {isCameraReady
@@ -459,6 +380,28 @@ export default function Home() {
                                 : "Camera Initializing..."}
                             </Button>
                           </>
+                        )}
+                        {uploadedCameraImage && phaseUpload == 1 && (
+                          <div className="p-2 flex justify-center items-center">
+                            <div className="relative">
+                              <Image
+                                src={uploadedCameraImage}
+                                alt="Uploaded Image"
+                                width="200"
+                                height="200"
+                              />
+                              <button
+                                type="button"
+                                className="bg-red-500 text-white w-4 h-4 rounded-full absolute -top-[10px] -right-[12px] hover:bg-red-400 flex justify-center items-center"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setUploadedCameraImage("");
+                                }}
+                              >
+                                <IoCloseCircleOutline />
+                              </button>
+                            </div>
+                          </div>
                         )}
                       </div>
                     )}
