@@ -20,8 +20,15 @@ import {
   IoInformationCircle,
 } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
+
+type FormDataType = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
 
 export default function Contact() {
   const router = useRouter();
@@ -33,9 +40,9 @@ export default function Contact() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm<FormDataType>();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<FormDataType> = async (data) => {
     setIsSubmitting(true);
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -74,9 +81,10 @@ export default function Contact() {
                 Get in Touch
               </h2>
               <p className="text-gray-700">
-                Whether you&apos;re experiencing an issue, want to provide feedback,
-                or have questions about our QR Scanner, please fill out the form
-                below and we&apos;ll get back to you as soon as possible.
+                Whether you&apos;re experiencing an issue, want to provide
+                feedback, or have questions about our QR Scanner, please fill
+                out the form below and we&apos;ll get back to you as soon as
+                possible.
               </p>
             </div>
 

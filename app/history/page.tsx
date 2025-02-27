@@ -37,7 +37,14 @@ import {
 } from "@/components/ui/dialog";
 
 export default function HistoryPage() {
-  const [scannedResults, setScannedResults] = useState<any[]>([]);
+  const [scannedResults, setScannedResults] = useState<
+    {
+      id: string;
+      src: string;
+      type: string;
+      content: QRCodeScanResult;
+    }[]
+  >([]);
   const [copy, setCopy] = useState<string>("");
 
   const router = useRouter();

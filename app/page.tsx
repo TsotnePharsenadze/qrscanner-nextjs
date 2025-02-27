@@ -63,8 +63,12 @@ export default function Home() {
     try {
       const image = new window.Image();
       image.src = imageSrc;
-      let parsedData: any = [];
-
+      let parsedData: {
+        id: string;
+        src: string;
+        type: string;
+        content: QRCodeScanResult;
+      }[] = [];
       image.onload = async () => {
         try {
           const codeReader = new BrowserMultiFormatReader();
@@ -80,10 +84,10 @@ export default function Home() {
               id: new Date().toISOString(),
               src: uploadedImageBase,
               type: !type ? "Uploaded Image" : "Camera taken Image",
-              content: result,
+              content: result as unknown as QRCodeScanResult,
             });
             localStorage.setItem("scannedResults", JSON.stringify(parsedData));
-
+            console.log(parsedData);
             setPhaseUpload(2);
           } else {
             setPhaseUploadCamera(2);
