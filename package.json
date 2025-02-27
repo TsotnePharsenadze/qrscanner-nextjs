@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/extension-accelerate": "^1.2.2",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-separator": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
@@ -38,7 +39,9 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "postcss": "^8",
+    "prisma": "^6.4.1",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.3",
     "typescript": "^5"
   }
 }

@@ -22,6 +22,8 @@ import {
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
+import sendContact from "@/actions/sendContact";
+import { toast } from "sonner";
 
 type FormDataType = {
   name: string;
@@ -33,7 +35,6 @@ type FormDataType = {
 export default function Contact() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const {
     register,
@@ -47,15 +48,17 @@ export default function Contact() {
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // TODO: NeonDB + Prisma
-    console.log(data);
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    reset();
+    const save = await sendContact(data);
+    if (!save) {
+      toast.error("Something went wrong! try again later");
+    } else {
+      toast.success(
+        "Thank you for your message! We'll respond to you shortly."
+      );
+    }
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
+    setIsSubmitting(false);
+    reset();
   };
 
   return (
@@ -87,12 +90,6 @@ export default function Contact() {
                 possible.
               </p>
             </div>
-
-            {isSubmitted && (
-              <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded text-green-700">
-                Thank you for your message! We&apos;ll respond to you shortly.
-              </div>
-            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
