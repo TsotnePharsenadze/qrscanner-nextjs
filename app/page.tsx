@@ -25,7 +25,7 @@ import {
   IoCamera,
 } from "react-icons/io5";
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { BrowserMultiFormatReader } from "@zxing/library";
@@ -46,7 +46,7 @@ export default function Home() {
     }
   };
 
-  const processImage = async (imageSrc: string) => {
+  const processImage = async (imageSrc: string, type?: number) => {
     setIsLoading(true);
     setCustomError("");
 
@@ -60,7 +60,11 @@ export default function Home() {
           const result = await codeReader.decodeFromImageElement(image);
           setResult(result.getText());
           toast.success("QR code scanned successfully!");
-          setPhaseUpload(2);
+          if (!type) {
+            setPhaseUpload(2);
+          } else {
+            setPhaseUploadCamera(2);
+          }
         } catch (error) {
           console.error("QR code scanning error:", error);
           setResult("No QR code found");
@@ -94,6 +98,8 @@ export default function Home() {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [phaseUpload, setPhaseUpload] = useState(1);
+  const [phaseUploadCamera, setPhaseUploadCamera] = useState(1);
+
   const [result, setResult] = useState("");
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -122,7 +128,7 @@ export default function Home() {
 
         const imageSrc = canvasRef.current.toDataURL("image/png");
         setUploadedCameraImage(imageSrc);
-        processImage(imageSrc);
+        processImage(imageSrc, 2);
 
         const stream = videoRef.current.srcObject as MediaStream;
         if (stream) {
@@ -183,7 +189,6 @@ export default function Home() {
                       variant="link"
                       onClick={() => {
                         setPhaseUpload(1);
-                        setResult("");
                       }}
                       className="flex items-center gap-2"
                     >
@@ -305,14 +310,14 @@ export default function Home() {
             <CardContent className="space-y-2 mt-2">
               <div
                 className={`border-t-4 rounded-lg p-2 ${
-                  phaseUpload === 1
+                  phaseUploadCamera === 1
                     ? "border-t-yellow-500"
                     : "border-t-green-500"
                 } ${customError && "border border-red-500"} shadow-xl`}
               >
                 <div className="flex justify-between">
                   <h1 className="flex items-center gap-2">
-                    {phaseUpload === 1 ? (
+                    {phaseUploadCamera === 1 ? (
                       <>
                         <IoCamera /> Open Webcam
                       </>
@@ -322,12 +327,11 @@ export default function Home() {
                       </>
                     )}
                   </h1>
-                  {phaseUpload === 2 && (
+                  {phaseUploadCamera === 2 && (
                     <Button
                       variant="link"
                       onClick={() => {
-                        setPhaseUpload(1);
-                        setResult("");
+                        setPhaseUploadCamera(1);
                       }}
                       className="flex items-center gap-2"
                     >
@@ -338,7 +342,7 @@ export default function Home() {
 
                 <div className="bg-gray-50 p-2">
                   <div className="border-2 border-dashed">
-                    {phaseUpload === 1 &&
+                    {phaseUploadCamera === 1 &&
                     !isCameraActive &&
                     !uploadedCameraImage ? (
                       <div className="flex flex-col justify-center items-center gap-y-2 p-2 cursor-pointer">
@@ -355,7 +359,7 @@ export default function Home() {
                       </div>
                     ) : (
                       <div className="relative">
-                        {isCameraActive && phaseUpload === 1 && (
+                        {isCameraActive && phaseUploadCamera === 1 && (
                           <>
                             <video
                               ref={videoRef}
@@ -381,7 +385,7 @@ export default function Home() {
                             </Button>
                           </>
                         )}
-                        {uploadedCameraImage && phaseUpload == 1 && (
+                        {uploadedCameraImage && phaseUploadCamera == 1 && (
                           <div className="p-2 flex justify-center items-center">
                             <div className="relative">
                               <Image
@@ -405,13 +409,32 @@ export default function Home() {
                         )}
                       </div>
                     )}
-                    {phaseUpload === 2 && <Textarea value={result} readOnly />}
+                    {phaseUploadCamera === 2 && (
+                      <Textarea value={result} readOnly />
+                    )}
                   </div>
                 </div>
               </div>
             </CardContent>
             <CardFooter>
-              {phaseUpload === 2 && (
+              {phaseUploadCamera === 1 && uploadedCameraImage && (
+                <Button
+                  onClick={() => {
+                    setPhaseUploadCamera(2);
+                  }}
+                  className={`${customError && "border border-red-500"}`}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    "Processing..."
+                  ) : (
+                    <>
+                      <FaPlus /> Get content
+                    </>
+                  )}
+                </Button>
+              )}
+              {phaseUploadCamera === 2 && (
                 <Button
                   variant="default"
                   size="lg"
